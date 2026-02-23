@@ -13,6 +13,7 @@ import pickle
 
 def train_model(data_path):
     df = pd.read_csv(data_path)
+    df = df.dropna()
     X = df.drop(columns=["price"])
     y = df["price"]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -27,6 +28,16 @@ def train_model(data_path):
 
 
 
-def predict_price(features):
-    # Placeholder for loading the model and making a prediction
-    print(f"Predicting price for features: {features}...")
+def predict_price(features, model_path="model.pkl"):
+    area = features.get("area")
+    rooms = features.get("rooms")
+    age = features.get("age")
+    if area is None or rooms is None or age is None:
+        raise ValueError("Missing required features. Please provide 'area', 'rooms', and 'age'.")
+    print(f"Predicting price for features: {features['area']}, {features['rooms']}, {features['age']}")
+    with open(model_path, "rb") as f:
+        model = pickle.load(f)
+    input_data = pd.DataFrame([features])
+    prediction = model.predict(input_data)[0]
+    print(f"Predicted price: {prediction}")
+    return prediction
