@@ -1,3 +1,5 @@
 venv/
 test.txt
 __pycache__/
+test.py
+test.csv
