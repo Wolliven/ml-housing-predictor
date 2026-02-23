@@ -15,8 +15,9 @@ def main() -> None:
 
     path = sys.argv[1]
     try:
-        train_model(path)
-        print(f"Model trained successfully.")
+        r2 =train_model(path)
+        print(f"Model trained successfully. Model saved to model.pkl. R2 Score: {r2}")
+        
     except (FileNotFoundError, ValueError) as e:
         print(e)
         sys.exit(1)    
