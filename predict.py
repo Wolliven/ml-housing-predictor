@@ -12,12 +12,13 @@ from ml_engine import predict_price
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate a housing price prediction.",
-        usage="python predict.py --area AREA --rooms ROOMS --age AGE",
+        usage="python predict.py --area AREA --rooms ROOMS --age AGE --path MODEL_PATH",
         epilog="Example: python predict.py --area 100 --rooms 3 --age 10",
     )
     parser.add_argument("--area", type=float, required=True, help="Area of the house (in square meters)")
     parser.add_argument("--rooms", type=int, required=True, help="Number of rooms")
     parser.add_argument("--age", type=int, required=True, help="Age of the house")
+    parser.add_argument("--path", type=str, required=True, help="Path to the trained model file")
     args = parser.parse_args()
     features = {
         "area": args.area,
@@ -26,7 +27,7 @@ def main() -> None:
     }
 
     try:
-        prediction = predict_price(features)
+        prediction = predict_price(features, model_path=args.path)
         print(f"Predicted price: {prediction}")
     except (FileNotFoundError, ValueError) as e:
         print(e)

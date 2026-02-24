@@ -6,21 +6,32 @@ trains a regression model, evaluates its performance, and saves
 the trained model to disk.
 """
 import sys
-from ml_engine import train_model
+import argparse
 
 def main() -> None:
-    if len(sys.argv) != 2:
-        print("Program usage: python train.py <data_csv_path>")
-        sys.exit(1)
-
-    path = sys.argv[1]
-    try:
-        r2, mse, mae = train_model(path)
-        print(f"Model trained successfully. Model saved to model.pkl. \nR2 Score: {r2:.4f} \nMSE: {mse:.4f} \nMAE: {mae:.4f}")
-        
-    except (FileNotFoundError, ValueError) as e:
-        print(e)
-        sys.exit(1)    
+    from ml_engine import train_model
+    
+    parser = argparse.ArgumentParser(
+        description="Train a housing price prediction model.",
+        epilog="Example: python train.py housing_data.csv --path model.pkl",
+    )
+    parser.add_argument("data_csv_path", type=str, help="Path to CSV dataset")
+    parser.add_argument("--path", type=str, required=False, help="Path where the trained model will be saved")
+    args = parser.parse_args()
+    
+    metrics, model_path = train_model(args.data_csv_path, model_path=args.path)
+    r2, mse, mae = metrics["r2"], metrics["mse"], metrics["mae"]
+    print(f"Model trained successfully. Model saved to {model_path}.")
+    print(f"R2 Score: {r2:.4f}")
+    print(f"MSE: {mse:.4f}")
+    print(f"MAE: {mae:.4f}")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nTraining interrupted by user. Exiting.")
+        sys.exit(130)
+    except (FileNotFoundError, ValueError) as e:
+        print(e)
+        sys.exit(1)

@@ -11,7 +11,13 @@ from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import pickle
 
 
-def train_model(data_path):
+def train_model(data_path, model_path="model.pkl"):
+    if not data_path.endswith(".csv"):
+        raise ValueError("Invalid data file format. Please provide a CSV file.")
+    if not model_path:
+        model_path = "model.pkl"
+    if not model_path.endswith(".pkl"):
+        raise ValueError("Invalid model file format. Please provide a .pkl file.")
     df = pd.read_csv(data_path)
     df = df.dropna()
     X = df.drop(columns=["price"])
@@ -20,12 +26,12 @@ def train_model(data_path):
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    r2  = r2_score(y_test, y_pred)
-    mse = mean_squared_error(y_test, y_pred)
-    mae = mean_absolute_error(y_test, y_pred)
-    with open("model.pkl", "wb") as f:
+    metrics = {"r2": r2_score(y_test, y_pred),
+        "mse": mean_squared_error(y_test, y_pred),
+        "mae": mean_absolute_error(y_test, y_pred)}
+    with open(model_path, "wb") as f:
         pickle.dump(model, f)
-    return r2, mse, mae
+    return metrics, model_path
 
 
 

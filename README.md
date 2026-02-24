@@ -45,9 +45,10 @@ This project emphasizes architectural clarity over complexity.
 ```
 
 ml-housing-predictor/
-├── train.py        # Model training entrypoint
-├── predict.py      # Inference entrypoint
-├── ml_engine.py    # Core ML logic (data prep, training, prediction)
+├── data/housing.csv # Sample training data
+├── train.py         # Model training entrypoint
+├── predict.py       # Inference entrypoint
+├── ml_engine.py     # Core ML logic (data prep, training, prediction)
 ├── requirements.txt
 ├── README.md
 └── .gitignore
