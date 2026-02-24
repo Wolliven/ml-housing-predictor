@@ -14,10 +14,6 @@ import pickle
 def train_model(data_path, model_path="model.pkl"):
     if not data_path.endswith(".csv"):
         raise ValueError("Invalid data file format. Please provide a CSV file.")
-    if not model_path:
-        model_path = "model.pkl"
-    if not model_path.endswith(".pkl"):
-        raise ValueError("Invalid model file format. Please provide a .pkl file.")
     df = pd.read_csv(data_path)
     df = df.dropna()
     X = df.drop(columns=["price"])
@@ -37,6 +33,10 @@ def train_model(data_path, model_path="model.pkl"):
 
 
 def predict_price(features, model_path="model.pkl"):
+    if not model_path:
+        model_path = "model.pkl"
+    if not model_path.endswith(".pkl"):
+        raise ValueError("Invalid model file format. Please provide a .pkl file.")
     area = features.get("area")
     rooms = features.get("rooms")
     age = features.get("age")
