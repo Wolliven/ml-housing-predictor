@@ -94,7 +94,7 @@ Columns:
 - area (float) - square meters
 - rooms (int) - number of rooms
 - age (int) - age of property in years
-- price (float) - target variable
+- price (int) - target variable
 
 ---
 

@@ -7,7 +7,7 @@ evaluation, and prediction functions used by the CLI entrypoints.
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import pickle
 
 
@@ -21,9 +21,11 @@ def train_model(data_path):
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     r2  = r2_score(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
     with open("model.pkl", "wb") as f:
         pickle.dump(model, f)
-    return r2
+    return r2, mse, mae
 
 
 
@@ -34,10 +36,8 @@ def predict_price(features, model_path="model.pkl"):
     age = features.get("age")
     if area is None or rooms is None or age is None:
         raise ValueError("Missing required features. Please provide 'area', 'rooms', and 'age'.")
-    print(f"Predicting price for features: {features['area']}, {features['rooms']}, {features['age']}")
     with open(model_path, "rb") as f:
         model = pickle.load(f)
     input_data = pd.DataFrame([features])
     prediction = model.predict(input_data)[0]
-    print(f"Predicted price: {prediction}")
     return prediction

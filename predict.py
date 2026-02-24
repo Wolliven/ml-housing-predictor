@@ -26,8 +26,8 @@ def main() -> None:
     }
 
     try:
-        predict_price(features)
-        print(f"Prediction generated successfully.")
+        prediction = predict_price(features)
+        print(f"Predicted price: {prediction}")
     except (FileNotFoundError, ValueError) as e:
         print(e)
         sys.exit(1)    
