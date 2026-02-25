@@ -42,8 +42,11 @@ def predict_price(features, model_path="model.pkl"):
     age = features.get("age")
     if area is None or rooms is None or age is None:
         raise ValueError("Missing required features. Please provide 'area', 'rooms', and 'age'.")
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
+    try:
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Model file not found: {model_path}")
     input_data = pd.DataFrame([features])
     prediction = model.predict(input_data)[0]
     return prediction

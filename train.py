@@ -10,16 +10,16 @@ import argparse
 
 def main() -> None:
     from ml_engine import train_model
-    
+
     parser = argparse.ArgumentParser(
         description="Train a housing price prediction model.",
         epilog="Example: python train.py housing_data.csv --path model.pkl",
     )
     parser.add_argument("data_csv_path", type=str, help="Path to CSV dataset")
-    parser.add_argument("--path", type=str, required=False, help="Path where the trained model will be saved")
+    parser.add_argument("--model_path", type=str, required=False, help="Path where the trained model will be saved")
     args = parser.parse_args()
     
-    metrics, model_path = train_model(args.data_csv_path, model_path=args.path)
+    metrics, model_path = train_model(args.data_csv_path, model_path=args.model_path)
     r2, mse, mae = metrics["r2"], metrics["mse"], metrics["mae"]
     print(f"Model trained successfully. Model saved to {model_path}.")
     print(f"R2 Score: {r2:.4f}")
